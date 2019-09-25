@@ -1,0 +1,6 @@
+*.o
+*.elf
+*.hex
+*.d
+.vscode/ipch/
+.sconsign.dblite

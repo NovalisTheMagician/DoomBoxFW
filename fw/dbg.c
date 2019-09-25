@@ -1,0 +1,13 @@
+#include "dbg.h"
+
+void DBG_EnableSWO()
+{
+    DEMCR = DEMCR_TRACEEN;
+    //TPIU_PORTSIZE = 0;
+    TPIU_PROTOCOL = 1;
+    DBG->DBGMCU_CR = DBG_TRACE_MODE_ASYNC | DBG_TRACE_IOEN;
+    ITM_LOCK = 0xC5ACCE55;
+    ITM_TC = ITM_TC_ITMENA | ITM_TC_SWOENA | ITM_TC_SYNCENA | (0x1 << 16);
+    ITM_TE = 1;
+    ITM_TP = 1;
+}
