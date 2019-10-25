@@ -1,6 +1,6 @@
 import os
 
-LD_FILE = 'fw/layout.ld'
+LD_FILE = 'layout.ld'
 CFLAGS = '-mcpu=cortex-m4 -mthumb -Wall -mfpu=fpv5-sp-d16 -mfloat-abi=hard -MMD'
 LDFLAGS = '--specs=nano.specs -mcpu=cortex-m4 -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -T ' + LD_FILE
 
