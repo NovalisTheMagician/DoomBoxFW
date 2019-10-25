@@ -2,5 +2,8 @@
 *.elf
 *.hex
 *.d
+*.a
 .vscode/ipch/
 .sconsign.dblite
+
+powershell.exe
