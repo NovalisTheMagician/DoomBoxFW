@@ -6,28 +6,35 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "make",
+            "command": "scons",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "build crt",
+            "type": "shell",
+            "command": "scons libcrt0.a",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "build fat",
+            "type": "shell",
+            "command": "scons libfat.a",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "flash",
             "type": "shell",
-            "command": "'C:/Program Files (x86)/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility/ST-LINK_CLI.exe' -P doomboxfw.hex -V -Rst",
-            "problemMatcher": [],
-            "group": "build"
-        },
-        {
-            "label": "flash_win7",
-            "type": "shell",
-            "command": "'D://STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility/ST-LINK_CLI.exe' -P doomboxfw.hex -V -Rst",
+            "command": "ST-LINK_CLI.exe -P firmware.hex -V -Rst",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "clean",
             "type": "shell",
-            "command": "make clean",
+            "command": "scons -c",
             "problemMatcher": [],
             "group": "build"
         },
@@ -41,7 +48,7 @@
             "problemMatcher": []
         },
         {
-            "label": "build_flash",
+            "label": "build flash",
             "dependsOn": [
                 "build",
                 "flash"
