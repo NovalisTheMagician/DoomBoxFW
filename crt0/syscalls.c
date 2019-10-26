@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/time.h>
 
 #include "fat/ff.h"
 
@@ -125,3 +126,10 @@ int _wait(int *status)
     return -1;
 }
 
+int _gettimeofday(struct timeval *tv, void *tzvp)
+{
+    uint64_t t = 1000000;//__your_system_time_function_here__();  // get uptime in nanoseconds
+    tv->tv_sec = t / 1000000000;  // convert to seconds
+    tv->tv_usec = ( t % 1000000000 ) / 1000;  // get remaining microseconds
+    return 0;  // return non-zero for error
+}

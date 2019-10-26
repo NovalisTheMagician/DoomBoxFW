@@ -11,6 +11,9 @@
 #include <string.h>
 #include <math.h>
 
+#include <lua.h>
+#include <lauxlib.h>
+
 #define LED1 13
 #define LED2 14
 
@@ -112,6 +115,10 @@ rgb hsv2rgb(hsv in)
 
 int main()
 {
+    lua_State *L = luaL_newstate();
+    //luaL_dostring(L, "print('Hello World!')");
+    lua_close(L);
+
     GPIO_Conf(GPIOG, LED1, GPIO_MODE_OUT, GPIO_OTYPE_PUSHPULL, GPIO_OSPEED_VERYHIGHSPEED, GPIO_PUD_NONE);
     GPIO_Conf(GPIOG, LED2, GPIO_MODE_OUT, GPIO_OTYPE_PUSHPULL, GPIO_OSPEED_VERYHIGHSPEED, GPIO_PUD_NONE);
 

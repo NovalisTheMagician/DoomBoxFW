@@ -1,8 +1,8 @@
 import os
 
 LD_FILE = 'layout.ld'
-CFLAGS = '-mcpu=cortex-m4 -mthumb -Wall -mfpu=fpv5-sp-d16 -mfloat-abi=hard -MMD'
-LDFLAGS = '--specs=nano.specs -mcpu=cortex-m4 -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -T ' + LD_FILE
+CFLAGS = '-mcpu=cortex-m4 -march=armv7e-m -mthumb -Wall -mfpu=fpv5-sp-d16 -mfloat-abi=hard -MMD'
+LDFLAGS = '--specs=nano.specs -mcpu=cortex-m4 -march=armv7e-m -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -T ' + LD_FILE
 
 hex_bld = Builder(action = 'arm-none-eabi-objcopy -O ihex $SOURCE $TARGET',
                 suffix = '.hex',
@@ -22,14 +22,23 @@ fw_files = Glob('fw/*.c')
 fat_files = Glob('fat/*.c')
 crt_files = Glob('crt0/*.c')
 
-fat_objs = env.Object(fat_files, CCFLAGS=CFLAGS, CPPPATH='fat')
+lua_files = Glob('lua/*.c')
+app_files = Glob('app/*.c')
+
+fat_objs = env.Object(fat_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['fat'])
 fat = env.Library('fat', fat_objs, LINKFLAGS=LDFLAGS)
 
-crt_objs = env.Object(crt_files, CCFLAGS=CFLAGS, CPPPATH=['crt0', '.'])
-crt = env.Library('crt0', crt_objs, LIBS=['fat'], LIBPATH='.', LINKFLAG=LDFLAGS)
+crt_objs = env.Object(crt_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['crt0', '.'])
+crt = env.Library('crt0', crt_objs, LIBS=['fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 
-fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH='fw')
-fw = env.Program('firmware', fw_objs, LIBS=['m', 'fat'], LIBPATH='.', LINKFLAGS=LDFLAGS)
+lua_objs = env.Object(lua_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['lua'])
+lua = env.Library('lua', lua_objs, LIBS=['m'], LIBPATH=[], LINKFLAGS=LDFLAGS)
+
+app_objs = env.Object(app_files, CCFLAGS=CFLAGS, CPPPATH=['app', 'lua'])
+app = env.Program('app', app_objs, LIBS=['c', 'crt0', 'lua', 'm'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
+
+fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH=['fw', 'lua'])
+fw = env.Program('firmware', fw_objs, LIBS=['lua', 'm', 'fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 fw_hex = env.Hex(fw)
 
 #Depends(fw_hex, crt)
