@@ -3,9 +3,9 @@
 #include <fcntl.h>
 #include <sys/time.h>
 
-#include "uart.h"
-#include "dbg.h"
-#include "scb.h"
+#include "hal/uart.h"
+#include "hal/dbg.h"
+#include "hal/scb.h"
 
 extern unsigned long _ssdram;
 extern unsigned long _esdram;

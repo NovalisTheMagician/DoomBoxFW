@@ -1,8 +1,8 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
-#include "stm32f4.h"
-#include "ltdc.h"
+#include "hal/stm32f4.h"
+#include "hal/ltdc.h"
 
 typedef uint32_t color_t;
 

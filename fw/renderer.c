@@ -3,13 +3,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "dma2d.h"
-#include "pixelformat.h"
-#include "tft.h"
+#include "hal/dma2d.h"
+#include "hal/pixelformat.h"
+#include "hal/tft.h"
 
 #include "vector.h"
 
-#include "layer.h"
+#include "hal/layer.h"
 
 //extern unsigned long _sframebuf;
 

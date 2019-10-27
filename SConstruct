@@ -19,6 +19,9 @@ env = Environment(  ENV = os.environ,
                     BUILDERS = { 'Hex' : hex_bld })
 
 fw_files = Glob('fw/*.c')
+fw_files = fw_files + Glob('fw/hal/*.c')
+fw_files = fw_files + Glob('fw/term/*.c')
+
 fat_files = Glob('fat/*.c')
 crt_files = Glob('crt0/*.c')
 
@@ -38,7 +41,7 @@ app_objs = env.Object(app_files, CCFLAGS=CFLAGS, CPPPATH=['app', 'lua'])
 app = env.Program('app', app_objs, LIBS=['c', 'crt0', 'lua', 'm'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 
 fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH=['fw', 'lua'])
-fw = env.Program('firmware', fw_objs, LIBS=['lua', 'm', 'fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
+fw = env.Program('firmware', fw_objs, LIBS=['m', 'fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 fw_hex = env.Hex(fw)
 
 #Depends(fw_hex, crt)

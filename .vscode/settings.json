@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "tft.h": "c",
+        "pixelformat.h": "c",
+        "dma2d.h": "c",
+        "layer.h": "c",
+        "spi.h": "c",
+        "rng.h": "c",
+        "uart.h": "c",
+        "dbg.h": "c",
+        "scb.h": "c",
+        "delay.h": "c",
+        "systick.h": "c",
+        "sdram.h": "c",
+        "gpio.h": "c",
+        "rcc.h": "c",
+        "stm32f4.h": "c"
+    }
+}
