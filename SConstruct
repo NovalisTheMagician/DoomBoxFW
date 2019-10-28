@@ -1,8 +1,8 @@
 import os
 
 LD_FILE = 'layout.ld'
-CFLAGS = '-mcpu=cortex-m4 -march=armv7e-m -mthumb -Wall -mfpu=fpv5-sp-d16 -mfloat-abi=hard -MMD'
-LDFLAGS = '--specs=nano.specs -mcpu=cortex-m4 -march=armv7e-m -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -T ' + LD_FILE
+CFLAGS = '-mcpu=cortex-m4 -march=armv7e-m -mthumb -Wall -mfpu=fpv4-sp-d16 -mfloat-abi=hard -MMD'
+LDFLAGS = '--specs=nano.specs -mcpu=cortex-m4 -march=armv7e-m -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -T ' + LD_FILE
 
 hex_bld = Builder(action = 'arm-none-eabi-objcopy -O ihex $SOURCE $TARGET',
                 suffix = '.hex',
