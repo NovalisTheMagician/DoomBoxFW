@@ -17,7 +17,7 @@
 #define GLYPH_HEIGHT 16
 #define NUM_CHARS 36
 static const uint8_t FONT[GLYPH_WIDTH * GLYPH_HEIGHT * NUM_CHARS] = {
-#include "font.inc"
+0
 };
 
 static color_t *frontBuffer;

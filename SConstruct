@@ -40,7 +40,7 @@ lua = env.Library('lua', lua_objs, LIBS=['m'], LIBPATH=[], LINKFLAGS=LDFLAGS)
 app_objs = env.Object(app_files, CCFLAGS=CFLAGS, CPPPATH=['app', 'lua'])
 app = env.Program('app', app_objs, LIBS=['c', 'crt0', 'lua', 'm'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 
-fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH=['fw', 'lua'])
+fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH=['fw', 'fat'])
 fw = env.Program('firmware', fw_objs, LIBS=['m', 'fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
 fw_hex = env.Hex(fw)
 

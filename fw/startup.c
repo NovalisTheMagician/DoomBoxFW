@@ -13,6 +13,8 @@
 
 #include "hal/interrupts.h"
 
+#include "term/term.h"
+
 extern unsigned long _sflashdata;
 extern unsigned long _sdata;
 extern unsigned long _edata;
@@ -194,6 +196,8 @@ void Startup()
     EnableFPU();
     
     DBG_EnableSWO();
+
+    TERM_Init();
 
     main();
 }
