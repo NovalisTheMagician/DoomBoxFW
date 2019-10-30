@@ -29,19 +29,19 @@ lua_files = Glob('lua/*.c')
 app_files = Glob('app/*.c')
 
 fat_objs = env.Object(fat_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['fat'])
-fat = env.Library('fat', fat_objs, LINKFLAGS=LDFLAGS)
+fat = env.Library('lib/fat', fat_objs, LINKFLAGS=LDFLAGS)
 
 crt_objs = env.Object(crt_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['crt0', '.'])
-crt = env.Library('crt0', crt_objs, LIBS=['fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
+crt = env.Library('lib/crt0', crt_objs, LIBS=['fat'], LIBPATH=['lib'], LINKFLAGS=LDFLAGS)
 
 lua_objs = env.Object(lua_files, CCFLAGS=CFLAGS + ' -fPIC', CPPPATH=['lua'])
-lua = env.Library('lua', lua_objs, LIBS=['m'], LIBPATH=[], LINKFLAGS=LDFLAGS)
+lua = env.Library('lib/lua', lua_objs, LIBS=['m'], LIBPATH=[], LINKFLAGS=LDFLAGS)
 
 app_objs = env.Object(app_files, CCFLAGS=CFLAGS, CPPPATH=['app', 'lua'])
-app = env.Program('app', app_objs, LIBS=['c', 'crt0', 'lua', 'm'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
+app = env.Program('app', app_objs, LIBS=['c', 'crt0', 'lua', 'm'], LIBPATH=['lib'], LINKFLAGS=LDFLAGS)
 
 fw_objs = env.Object(fw_files, CCFLAGS=CFLAGS, CPPPATH=['fw', 'fat'])
-fw = env.Program('firmware', fw_objs, LIBS=['m', 'fat'], LIBPATH=['.'], LINKFLAGS=LDFLAGS)
+fw = env.Program('firmware', fw_objs, LIBS=['m', 'fat'], LIBPATH=['lib'], LINKFLAGS=LDFLAGS)
 fw_hex = env.Hex(fw)
 
 #Depends(fw_hex, crt)

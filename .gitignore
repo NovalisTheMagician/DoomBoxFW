@@ -6,4 +6,6 @@
 .vscode/ipch/
 .sconsign.dblite
 
+lib/
+
 powershell.exe

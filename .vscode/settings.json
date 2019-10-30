@@ -15,5 +15,6 @@
         "gpio.h": "c",
         "rcc.h": "c",
         "stm32f4.h": "c"
-    }
+    },
+    "python.linting.enabled": false
 }
