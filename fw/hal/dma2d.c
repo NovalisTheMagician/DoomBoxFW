@@ -33,6 +33,6 @@ void DMA2D_SetOutput(DMA2D_image_t *imageDef, uint16_t width, uint16_t height)
 
 void DMA2D_StartTransfer(DMA2D_TransferType transferType)
 {
-    while((DMA2D->CR & DMA2D_CR_START));
     DMA2D->CR = transferType | DMA2D_CR_START;
+    while((DMA2D->CR & DMA2D_CR_START));
 }

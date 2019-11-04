@@ -5,6 +5,9 @@
 #include "hal/rng.h"
 #include "hal/layer.h"
 #include "hal/dma2d.h"
+#include "hal/nvic.h"
+
+#include "hal/io.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,11 +23,21 @@
 void led_on(uint32_t);
 void led_off(uint32_t);
 void led_toggle(uint32_t);
+void drawRect(uint16_t*, int, int, int, int, int, uint16_t);
+uint16_t colAdd(uint16_t, int);
 
 extern unsigned long _ssdram;
 
 const uint16_t GREEN = 0x07E0;
 const uint16_t RED = 0xF800;
+const uint16_t BLUE = 0x001F;
+const uint16_t WHITE = 0xFFFF;
+const uint16_t BLACK = 0x0000;
+
+void DMA2DHandler()
+{
+    led_on(LED2);
+}
 
 int main()
 {
@@ -39,27 +52,47 @@ int main()
     uint16_t *frontbuffer = buffer1;
     uint16_t *backBuffer = buffer2;
 
-    LAYER_SetWindow(LAYER1, 0, 0, 240, 320, PF_RGB565);
-    LAYER_SetFramebuffer(LAYER1, (void *)(frontbuffer));
+    LAYER_SetWindow(LAYER1, 0, 0, WIDTH, HEIGHT, PF_RGB565);
+    LAYER_SetFramebuffer(LAYER1, frontbuffer);
     LAYER_Reload(true);
     LAYER_Enable(LAYER1);
 
     DMA2D_Init();
 
+    NVIC_EnableIRQ(DMA2D_IRQn);
+    DMA2D->CR |= DMA2D_CR_TEIE;
+    DMA2D->CR |= DMA2D_CR_CEIE;
+
     DMA2D_image_t output = { 0 };
-    output.memoryAddr = (void *)backBuffer;
+    output.memoryAddr = backBuffer;
     output.pixelFormat = PF_RGB565;
 
-    printf("Hello World!\r\n");
+    fprintf(iouartout, "Hello World!\r\n");
+    fprintf(iouartout, "Buffer1 Address: %p\r\n", buffer1);
+    fprintf(iouartout, "Buffer2 Address: %p\r\n", buffer2);
 
-    uint16_t color = GREEN;
+    uint16_t color = BLACK;
     while(1)
     {
         //printf("%f\r\n", color);
+        //color = colAdd(color, 1);
 
         output.color = color;
-        DMA2D_SetOutput(&output, 240, 320);
+        output.offset = 0;
+        DMA2D_SetOutput(&output, WIDTH, HEIGHT);
         DMA2D_StartTransfer(TT_REG_TO_MEM);
+
+        output.color = GREEN;
+        output.offset = WIDTH - 16;
+        DMA2D_SetOutput(&output, 16, 16);
+        DMA2D_StartTransfer(TT_REG_TO_MEM);
+
+        output.color = RED;
+        output.offset = WIDTH - 16;
+        output.memoryAddr = backBuffer + (WIDTH - 16);
+        DMA2D_SetOutput(&output, 16, 16);
+        DMA2D_StartTransfer(TT_REG_TO_MEM);
+        
         
         if(backBuffer == buffer1)
         {
@@ -72,9 +105,33 @@ int main()
             frontbuffer = buffer2;
         }
         output.memoryAddr = backBuffer;
+
         LAYER_SetFramebuffer(LAYER1, frontbuffer);
         LAYER_Reload(false);
         TFT_WaitForVSYNC();
+
+        //delay(100);
+    }
+}
+
+uint16_t colAdd(uint16_t col, int val)
+{
+    int r = (col & RED) >> 11;
+    int g = (col & GREEN) >> 5;
+    int b = (col & BLUE);
+
+    return (((r + 1) << 11) & RED) | (((g + 1) << 5) & GREEN) | ((b + 1) & BLUE);
+}
+
+void drawRect(uint16_t *buffer, int bufWidth, int x, int y, int width, int height, uint16_t color)
+{
+    for(int i = y; i < height; ++i)
+    {
+        for(int j = x; j < width; ++j)
+        {
+            int index = (y + i) * bufWidth + (x + j);
+            buffer[index] = color;
+        }
     }
 }
 

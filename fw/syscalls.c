@@ -73,7 +73,7 @@ void *_sbrk(int incr)
 // io stuff
 
 #include <ff.h>
-#include "io.h"
+#include "hal/io.h"
 #include "term/term.h"
 
 #define MAX_FILES 255

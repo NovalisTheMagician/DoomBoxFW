@@ -1,5 +1,7 @@
 #include "term.h"
 
+#include "../hal/dma2d.h"
+
 typedef struct _font
 {
     const char *name;

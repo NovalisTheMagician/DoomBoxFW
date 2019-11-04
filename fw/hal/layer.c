@@ -18,7 +18,7 @@ void LAYER_SetWindow(LAYER_t *layer, uint32_t x, uint32_t y, uint32_t width, uin
     layer->CFBLR = ((width * pixelSize) << 16) | ((width * pixelSize) + 3);
     layer->CFBLNR = height;
 
-    layer->PFCR = PF_RGB565;
+    layer->PFCR = pf;
 }
 
 void LAYER_SetFramebuffer(LAYER_t *layer, void *framebuffer)

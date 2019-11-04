@@ -10,6 +10,7 @@
 #include "hal/uart.h"
 #include "hal/rng.h"
 #include "hal/spi.h"
+#include "hal/io.h"
 
 #include "hal/interrupts.h"
 
@@ -196,6 +197,8 @@ void Startup()
     EnableFPU();
     
     DBG_EnableSWO();
+
+    IO_Init();
 
     TERM_Init();
 

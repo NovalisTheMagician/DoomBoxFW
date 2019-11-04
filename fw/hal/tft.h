@@ -1,8 +1,15 @@
 #ifndef TFT_H_
 #define TFT_H_
 
+//#define LCD_MODE_PORTRAIT
+
+#ifndef LCD_MODE_PORTRAIT
+#define LCD_WIDTH	320
+#define LCD_HEIGHT	240 + 80
+#else
 #define LCD_WIDTH	240
 #define LCD_HEIGHT	320
+#endif
 
 #define HFP   10
 #define HSYNC 10

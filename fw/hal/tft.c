@@ -121,6 +121,8 @@ static void SendData(uint8_t data)
 	GPIO_WritePin(CS_PORT, CS_PIN, 1);
 }
 
+//#define LCD_UPSIDE_DOWN
+
 static void InitController()
 {
 	SendCmd(LCD_CMD_RESET);
@@ -129,13 +131,7 @@ static void InitController()
 	SendData(0x00);
 	SendData(0x1B);
 
-	SendCmd(LCD_CMD_MAC);
-#ifdef LCD_UPSIDE_DOWN
-	SendData(0x08); // upside down
-#else
-	SendData(0xC8);
-#endif
-
+#ifdef LCD_MODE_PORTRAIT
 	SendCmd(LCD_CMD_RGB_INTERFACE);
 	SendData(0xC2);
 
@@ -144,6 +140,9 @@ static void InitController()
 	SendData(0xA7);
 	SendData(0x27);
 	SendData(0x04);
+
+	SendCmd(LCD_CMD_MAC);
+	SendData(0xC8);
 
 	SendCmd(LCD_CMD_COLUMN_ADDR);
 	SendData(0x00);
@@ -161,6 +160,40 @@ static void InitController()
 	SendData(0x01);
 	SendData(0x00);
 	SendData(0x06);
+#else
+	SendCmd(LCD_CMD_RGB_INTERFACE);   // RGB Interface Signal Control
+	SendData(0xC2); // ByPass_MODE = 1, RCM [1:0] = "10" (RGB Mode = DE mode)
+
+	SendCmd(LCD_CMD_INTERFACE);   // Interface Control
+	SendData(0x00); // WEMODE = 0 => avoid white triangles
+	SendData(0x00); //
+	SendData(0x0A); // RM = 1 (Interface for RAM Access = RGB interface) // 0x02
+
+	SendCmd(LCD_CMD_PIXEL_FORMAT);   // Pixel Format Set
+	SendData(0x55); // 16-bit RGB // 0x66
+
+	SendCmd(LCD_CMD_DFC);
+	SendData(0x0A);
+	SendData(0x87); // A7
+	SendData(0x27);
+	SendData(0x04);
+
+	SendCmd(LCD_CMD_MAC);   // Memory Access Control
+	//SendData(0xE8); // Landscape (viewing angle: Right (3:00))
+	SendData(0x28); // Landscape Inverted (viewing angle: Left (9:00))
+
+	SendCmd(LCD_CMD_COLUMN_ADDR);   // Column Address Set
+	SendData(0x00); // SC = 0
+	SendData(0x00);
+	SendData(0x01); // EC = 319
+	SendData(0x3F);
+
+	SendCmd(LCD_CMD_PAGE_ADDR);   // Page Address Set
+	SendData(0x00); // SP = 0
+	SendData(0x00);
+	SendData(0x00); // EP = 239
+	SendData(0xEF);
+#endif
 
 	SendCmd(LCD_CMD_SLEEP_OUT);
 	delay(1);
